@@ -82,7 +82,26 @@ class InnerNode extends BPlusNode {
     public LeafNode get(DataBox key) {
         // TODO(proj2): implement
 
-        return null;
+        int mid = 0;
+        // binary search
+        int leftInclusive = 0;
+        int rightExclusive = keys.size();
+        while (leftInclusive < rightExclusive) {
+            mid = (leftInclusive + rightExclusive) / 2;
+            DataBox midKey = keys.get(mid);
+            int compareResult = midKey.compareTo(key);
+            if (compareResult == 0) {
+                long childPage = children.get(mid + 1);
+                BPlusNode childNode = BPlusNode.fromBytes(metadata, bufferManager, treeContext, childPage);
+                return childNode.get(key);
+            } else if (compareResult > 0) {
+                rightExclusive = mid;
+            } else {
+                leftInclusive = mid;
+            }
+        }
+        BPlusNode childNode = BPlusNode.fromBytes(metadata, bufferManager, treeContext, mid);
+        return childNode.get(key);
     }
 
     // See BPlusNode.getLeftmostLeaf.

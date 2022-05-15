@@ -146,8 +146,8 @@ public class BPlusTree {
         LockUtil.ensureSufficientLockHeld(lockContext, LockType.NL);
 
         // TODO(proj2): implement
-
-        return Optional.empty();
+        LeafNode leafNode = root.get(key);
+        return leafNode.getKey(key); // leafNode.getKey是用keys.indexOf(key)查找的，应该可以用二分查找加速
     }
 
     /**
