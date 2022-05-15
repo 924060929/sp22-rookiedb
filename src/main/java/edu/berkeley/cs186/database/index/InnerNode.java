@@ -110,7 +110,9 @@ class InnerNode extends BPlusNode {
         assert(children.size() > 0);
         // TODO(proj2): implement
 
-        return null;
+        Long firstChildPage = children.get(0);
+        BPlusNode firstChildNode = BPlusNode.fromBytes(metadata, bufferManager, treeContext, firstChildPage);
+        return firstChildNode.getLeftmostLeaf();
     }
 
     // See BPlusNode.put.
